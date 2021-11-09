@@ -13,6 +13,8 @@ public class zweiteKlasse {
         this.cname = cname; //name wird zu dem Objekt geordnet
         this.czahl = czahl; //zahl wird zu dem Objekt geordnet
 
+        int ergebnis = malmal(3,6);
+        System.out.print(ergebnis);
     }
 
 
@@ -30,5 +32,9 @@ public class zweiteKlasse {
 
     public void setCzahl() { //setze die Zahl
         this.czahl = czahl;
+    }
+
+    public int malmal(int a, int b) {
+        return a * b;
     }
 }

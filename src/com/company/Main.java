@@ -6,7 +6,7 @@ public class Main {
         // zweiteKlasse t = null; //objekt der zweiten Klasse
         // t = new zweiteKlasse();
 
-        //zweiteKlasse t = new zweiteKlasse();
+        zweiteKlasse t = new zweiteKlasse("Danja", 19);
 
     }
 
