@@ -124,13 +124,48 @@ class MainTest {
     public void test1() {
 
         //assertTrue(gehirn.i == 5) ; //t.i ist 5 --> true
-        //assertTrue(zweiteKlasse.methode(eingabe,eingabe) == Ausgabe) berechnung soll dem Ergebnis entsprechen
         assertEquals(5, gehirn.i); //t.i entspricht 5 --> true
 
+    }
+
+    @DisplayName("mehrfache asserts")
+    @Test
+    public void test12() {
+
+        assertAll("mehrere Abfragen auf jeden Fall",
+                () -> assertEquals("4", gehirn.j),
+                () -> assertEquals(8, gehirn.getCzahl())
+        );
 
     }
 
 
+    @DisplayName("Schaltjahr Prüfung")
+    @ParameterizedTest(name="Prüfung {0} hat das Ergebnis {1} richtig getestet")
+    @CsvSource({"1, 5, 1, 5", "2, 10 , 2, 5", "3, 20, 4, 5"})
+    public void schaltjahrprufung(int versuch, int ergebnis, int a, int b) {
+
+        System.out.print(versuch);
+        assertEquals(ergebnis, gehirn.malmal(a,b));
+
+    }
+
+
+    @DisplayName("Fehler behandeln")
+    @Test
+    public void test123() {
+
+        assertEquals(5, gehirn.i); //t.i entspricht 5 --> true
+
+       // assertThrows(IndexOutOfBoundsException.class, //im Falle eines Fehlers
+       //         ()-> {System.out.print(gehirn.i);}
+       // );
+
+    }
+
+
+    //Klasse namelol = (parameters) -> {Methodeninhalt}
+    // Klasse namelol = new Klasse() {public void run(){Methodeninhalt}}
 
     @AfterEach
     void cleanUpAll() {
