@@ -1,15 +1,12 @@
 package com.company;
 
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +14,7 @@ class MainTest {
 
     zweiteKlasse gehirn;
 
-    @BeforeEach //setup vor dem Test
+    @BeforeEach //setup vor jedem Test
     void setUp() {
         gehirn = new zweiteKlasse("danja",8);
     }
@@ -26,8 +23,7 @@ class MainTest {
     @Test
     @DisplayName("Einmal Multiplikation testen 4mal5")
     void testMultiply() {
-        assertEquals(20, gehirn.malmal(4, 5),
-                "Sollte normal 20 ergeben");
+        assertEquals(20, gehirn.malmal(4, 5), "Sollte normal 20 ergeben");
     }
 
 
@@ -40,12 +36,12 @@ class MainTest {
 
 
     public static int[][] data() {
-        return new int[][] { { 1 , 2, 2 }, { 5, 3, 15 }, { 121, 4, 484 } };
+        return new int[][] { { 1 , 2, 2 }, { 5, 3, 15 }, { 121, 4, 484 } }; //m1 * m2 = expected
     }
 
     @ParameterizedTest
     @MethodSource(value =  "data") //das ergebnis der methode "data" wird eingefügt
-    void testWithStringParameter(int[] data) {
+    void testWithStringParameter(int[] data) { //array verwenden
         int m1 = data[0];
         int m2 = data[1];
         int expected = data[2];
@@ -54,34 +50,56 @@ class MainTest {
 
 
     @ParameterizedTest
+    @DisplayName("Input großschreiben-Test")
     @CsvSource({"test,TEST", "tEst,TEST", "Java,JAVA"})
     void toUpperCase_ShouldGenerateTheExpectedUppercaseValue(String input, String expected) {
-        String actualValue = input.toUpperCase();
+        String actualValue = input.toUpperCase(); //input wird großgeschrieben
         assertEquals(expected, actualValue);
     }
 
 
-    @DisplayName("Should pass a non-null message to our test method")
+
     @ParameterizedTest
+    @DisplayName("Es ist nicht -null-")
     @ValueSource(strings = {"Hello", "World"}) //string, int, double
     void shouldPassNonNullMessageAsMethodParameter(String message) {
         assertNotNull(message);
     }
 
 
-    //@Test
-    // void methodenname(){
-        // Arrange: Startzustand "gegeben"
-        // String erwartet = "Danja";
-        // Act: Methodenaufruf
-        // names.add("Danja");
-        // Assert: erzieltes Ergebnis erreicht?
-        // assertEquals("danja", m.getCname()); assertTrue, assertNotNull
-        //
-    //}
+
+    @ParameterizedTest
+    @DisplayName("ArgumentsSource Test hier")
+    @ArgumentsSource(Argumenten.class)
+    void testWithArgumentsSource(String argument) {
+        assertNotNull(argument);
+    }
+
+    public static class Argumenten implements ArgumentsProvider { //interne Klasse mit static (ohne Objektbildung)
+
+        @Override
+        public Stream<? extends Arguments> provideArguments (ExtensionContext context){
+            return Stream.of("apple", "banana").map(Arguments::of);
+        }
+
+    }
 
 
+    @Test //HIER ####
+    @DisplayName("Name des Tests")
+    @Disabled("Nur zur Info hier")
+    void methodenname(){
+        //Arrange: Startzustand "gegeben";
+        gehirn.setCname("Danja");
+        gehirn.setCzahl(20);
+        //Act: Methodenaufruf
+        gehirn.malmal(1,1);
+        //Assert: erzieltes Ergebnis erreicht?;
+        assertEquals("danja", gehirn.getCname()); //assertTrue, assertNotNull;
+    }
 
+
+    @DisplayName("get Cname Test")
     @Test
     void getCname(){
 
@@ -91,7 +109,7 @@ class MainTest {
 
     }
 
-
+    @DisplayName("get Czahl Test")
     @Test
     void getCzahl(){
 
@@ -101,14 +119,11 @@ class MainTest {
 
     }
 
-
-    //private final zweiteKlasse t = new zweiteKlasse("danja",8);
-
+    @DisplayName("ist gehirn.i = 5? \uD83D\uDE31")
     @Test
     public void test1() {
 
         //assertTrue(gehirn.i == 5) ; //t.i ist 5 --> true
-
         //assertTrue(zweiteKlasse.methode(eingabe,eingabe) == Ausgabe) berechnung soll dem Ergebnis entsprechen
         assertEquals(5, gehirn.i); //t.i entspricht 5 --> true
 
@@ -117,11 +132,15 @@ class MainTest {
 
 
 
-
-
-
     @AfterEach
-    void tearDown() {
-
+    void cleanUpAll() {
+        System.out.println("cleanUpAll()");
+        //server.close();
     }
+
+    @AfterAll
+    public static void cleanUp(){
+        System.out.println("cleanUp()");
+    }
+
 }

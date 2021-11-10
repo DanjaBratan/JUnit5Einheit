@@ -22,7 +22,7 @@ public class zweiteKlasse {
         return cname;
     }
 
-    public void setCname() { //setze den Namen
+    public void setCname(String name) { //setze den Namen
         this.cname = cname;
     }
 
@@ -30,7 +30,7 @@ public class zweiteKlasse {
         return czahl;
     }
 
-    public void setCzahl() { //setze die Zahl
+    public void setCzahl(int zahl) { //setze die Zahl
         this.czahl = czahl;
     }
 
